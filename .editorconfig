@@ -1,0 +1,47 @@
+# EditorConfig pour DROP IT Apps
+# https://editorconfig.org
+
+# Configuration globale
+root = true
+
+# Tous les fichiers
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+indent_style = space
+indent_size = 4
+
+# HTML
+[*.html]
+indent_size = 4
+max_line_length = 120
+
+# CSS/SCSS
+[*.{css,scss}]
+indent_size = 4
+max_line_length = 100
+
+# JavaScript
+[*.{js,jsx}]
+indent_size = 4
+max_line_length = 100
+quote_type = single
+
+# JSON
+[*.json]
+indent_size = 2
+
+# Markdown
+[*.md]
+trim_trailing_whitespace = false
+max_line_length = 0
+
+# YAML
+[*.{yml,yaml}]
+indent_size = 2
+
+# Makefiles
+[Makefile]
+indent_style = tab

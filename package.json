@@ -1,0 +1,102 @@
+{
+  "name": "drop-it-apps",
+  "version": "1.0.0",
+  "description": "Suite d'applications innovantes pour la livraison et le commerce en Afrique - DROP IT, DROP IT PRO, DROP TRADE",
+  "main": "index.html",
+  "scripts": {
+    "start": "serve .",
+    "dev": "serve . --single",
+    "firebase:serve": "firebase serve",
+    "firebase:deploy": "firebase deploy",
+    "firebase:deploy:hosting": "firebase deploy --only hosting",
+    "firebase:deploy:rules": "firebase deploy --only firestore:rules",
+    "test": "echo \"Tests à implémenter\" && exit 0",
+    "lint:js": "eslint assets/js/**/*.js",
+    "lint:css": "stylelint assets/css/**/*.css",
+    "format": "prettier --write \"**/*.{js,css,html,md}\"",
+    "validate": "npm run lint:js && npm run lint:css"
+  },
+  "keywords": [
+    "livraison",
+    "delivery",
+    "commerce",
+    "marketplace",
+    "afrique",
+    "senegal",
+    "drop-it",
+    "firebase",
+    "webapp"
+  ],
+  "author": {
+    "name": "Cheick Na",
+    "email": "cheicknadevdot@gmail.com",
+    "url": "https://github.com/cheickna"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/votre-username/drop-it.git"
+  },
+  "bugs": {
+    "url": "https://github.com/votre-username/drop-it/issues",
+    "email": "cheicknadevdot@gmail.com"
+  },
+  "homepage": "https://drop-it-apps.web.app",
+  "engines": {
+    "node": ">=14.0.0",
+    "npm": ">=6.0.0"
+  },
+  "devDependencies": {
+    "eslint": "^8.0.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.25.0",
+    "prettier": "^2.8.0",
+    "serve": "^14.0.0",
+    "stylelint": "^14.0.0",
+    "stylelint-config-standard": "^24.0.0"
+  },
+  "dependencies": {
+    "firebase": "^9.6.10"
+  },
+  "browserslist": [
+    "last 2 Chrome versions",
+    "last 2 Firefox versions",
+    "last 2 Safari versions",
+    "last 2 Edge versions",
+    "> 1%",
+    "not dead"
+  ],
+  "prettier": {
+    "semi": true,
+    "trailingComma": "es5",
+    "singleQuote": true,
+    "printWidth": 100,
+    "tabWidth": 4,
+    "useTabs": false
+  },
+  "eslintConfig": {
+    "env": {
+      "browser": true,
+      "es2021": true
+    },
+    "extends": "eslint:recommended",
+    "parserOptions": {
+      "ecmaVersion": 12,
+      "sourceType": "module"
+    },
+    "rules": {
+      "indent": ["error", 4],
+      "linebreak-style": ["error", "unix"],
+      "quotes": ["error", "single"],
+      "semi": ["error", "always"]
+    }
+  },
+  "stylelint": {
+    "extends": "stylelint-config-standard",
+    "rules": {
+      "indentation": 4,
+      "color-hex-case": "lower",
+      "color-hex-length": "long"
+    }
+  }
+}

@@ -1,0 +1,36 @@
+# robots.txt pour DROP IT Apps
+# Ce fichier indique aux robots d'indexation (Google, Bing, etc.) 
+# quelles pages ils peuvent crawler
+
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://drop-it-apps.web.app/sitemap.xml
+
+# Empêcher l'indexation de certains fichiers
+Disallow: /assets/js/
+Disallow: /assets/css/
+Disallow: /.git/
+Disallow: /node_modules/
+Disallow: /.firebase/
+
+# Temps de crawl (en secondes)
+Crawl-delay: 10
+
+# Bots spécifiques
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: Slurp
+Allow: /
+
+# Bloquer les mauvais bots
+User-agent: AhrefsBot
+Disallow: /
+
+User-agent: SemrushBot
+Disallow: /

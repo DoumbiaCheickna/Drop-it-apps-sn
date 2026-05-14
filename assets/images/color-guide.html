@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guide des Couleurs - DROP IT Apps</title>
+    <link rel="stylesheet" href="../css/colors.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; 
+            background: #f8fafc;
+            padding: 2rem;
+        }
+        .container { max-width: 1200px; margin: 0 auto; }
+        h1 { margin-bottom: 2rem; color: #0f172a; }
+        h2 { margin: 2rem 0 1rem; color: #334155; font-size: 1.5rem; }
+        .color-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); 
+            gap: 1rem; 
+            margin-bottom: 3rem;
+        }
+        .color-card {
+            background: white;
+            border-radius: 0.75rem;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+        }
+        .color-preview {
+            height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+        }
+        .color-info {
+            padding: 1rem;
+        }
+        .color-name {
+            font-weight: 600;
+            color: #0f172a;
+            margin-bottom: 0.5rem;
+        }
+        .color-code {
+            font-family: 'Courier New', monospace;
+            font-size: 0.875rem;
+            color: #64748b;
+            background: #f1f5f9;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+        }
+        .gradient-card {
+            height: 150px;
+            border-radius: 0.75rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 1.25rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .example-section {
+            background: white;
+            padding: 2rem;
+            border-radius: 1rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎨 Guide des Couleurs - DROP IT Apps</h1>
+        
+        <h2>Couleurs Principales</h2>
+        <div class="color-grid">
+            <div class="color-card">
+                <div class="color-preview" style="background: #2563eb;">Primary</div>
+                <div class="color-info">
+                    <div class="color-name">Bleu Principal</div>
+                    <div class="color-code">#2563eb</div>
+                </div>
+            </div>
+            <div class="color-card">
+                <div class="color-preview" style="background: #7c3aed;">Secondary</div>
+                <div class="color-info">
+                    <div class="color-name">Violet</div>
+                    <div class="color-code">#7c3aed</div>
+                </div>
+            </div>
+            <div class="color-card">
+                <div class="color-preview" style="background: #ec4899;">Accent</div>
+                <div class="color-info">
+                    <div class="color-name">Rose</div>
+                    <div class="color-code">#ec4899</div>
+                </div>
+            </div>
+            <div class="color-card">
+                <div class="color-preview" style="background: #10b981;">Success</div>
+                <div class="color-info">
+                    <div class="color-name">Vert</div>
+                    <div class="color-code">#10b981</div>
+                </div>
+            </div>
+        </div>
+
+        <h2>Gradients des Applications</h2>
+        <div class="color-grid">
+            <div class="gradient-card" style="background: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%);">
+                DROP IT
+            </div>
+            <div class="gradient-card" style="background: linear-gradient(135deg, #ec4899 0%, #f43f5e 100%);">
+                DROP IT PRO
+            </div>
+            <div class="gradient-card" style="background: linear-gradient(135deg, #10b981 0%, #06b6d4 100%);">
+                DROP TRADE
+            </div>
+        </div>
+
+        <h2>Couleurs Neutres</h2>
+        <div class="color-grid">
+            <div class="color-card">
+                <div class="color-preview" style="background: #0f172a;">Slate 900</div>
+                <div class="color-info">
+                    <div class="color-name">Très Foncé</div>
+                    <div class="color-code">#0f172a</div>
+                </div>
+            </div>
+            <div class="color-card">
+                <div class="color-preview" style="background: #334155;">Slate 700</div>
+                <div class="color-info">
+                    <div class="color-name">Foncé</div>
+                    <div class="color-code">#334155</div>
+                </div>
+            </div>
+            <div class="color-card">
+                <div class="color-preview" style="background: #64748b;">Slate 500</div>
+                <div class="color-info">
+                    <div class="color-name">Moyen</div>
+                    <div class="color-code">#64748b</div>
+                </div>
+            </div>
+            <div class="color-card">
+                <div class="color-preview" style="background: #cbd5e1; color: #334155;">Slate 300</div>
+                <div class="color-info">
+                    <div class="color-name">Clair</div>
+                    <div class="color-code">#cbd5e1</div>
+                </div>
+            </div>
+        </div>
+
+        <h2>Exemples d'Utilisation</h2>
+        <div class="example-section">
+            <h3 style="margin-bottom: 1rem;">Boutons</h3>
+            <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                <button style="background: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%); color: white; padding: 0.75rem 1.5rem; border: none; border-radius: 0.5rem; font-weight: 600; cursor: pointer; box-shadow: 0 8px 20px rgba(37, 99, 235, 0.25);">
+                    Bouton Principal
+                </button>
+                <button style="background: linear-gradient(135deg, #ec4899 0%, #f43f5e 100%); color: white; padding: 0.75rem 1.5rem; border: none; border-radius: 0.5rem; font-weight: 600; cursor: pointer; box-shadow: 0 8px 20px rgba(236, 72, 153, 0.25);">
+                    Bouton PRO
+                </button>
+                <button style="background: linear-gradient(135deg, #10b981 0%, #06b6d4 100%); color: white; padding: 0.75rem 1.5rem; border: none; border-radius: 0.5rem; font-weight: 600; cursor: pointer; box-shadow: 0 8px 20px rgba(16, 185, 129, 0.25);">
+                    Bouton Success
+                </button>
+            </div>
+        </div>
+
+        <div class="example-section">
+            <h3 style="margin-bottom: 1rem;">Badges</h3>
+            <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                <span style="background: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%); color: white; padding: 0.25rem 0.75rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 600;">DROP IT</span>
+                <span style="background: linear-gradient(135deg, #ec4899 0%, #f43f5e 100%); color: white; padding: 0.25rem 0.75rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 600;">PRO</span>
+                <span style="background: linear-gradient(135deg, #10b981 0%, #06b6d4 100%); color: white; padding: 0.25rem 0.75rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 600;">NOUVEAU</span>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

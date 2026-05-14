@@ -1,0 +1,254 @@
+rules_version = '2';
+
+// Règles de sécurité pour Cloud Firestore
+// Documentation: https://firebase.google.com/docs/firestore/security/get-started
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Fonction pour vérifier si l'utilisateur est authentifié
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    // Fonction pour vérifier si l'utilisateur est admin
+    function isAdmin() {
+      return isAuthenticated() && 
+             get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    }
+    
+    // Fonction pour vérifier la validité d'un email
+    function isValidEmail(email) {
+      return email.matches('.*@.*\\..*');
+    }
+    
+    // Fonction pour vérifier la longueur d'une chaîne
+    function isValidLength(text, min, max) {
+      return text.size() >= min && text.size() <= max;
+    }
+    
+    // ============================================
+    // Collection: testimonials (Témoignages)
+    // ============================================
+    match /testimonials/{testimonialId} {
+      // Lecture: Seulement les témoignages approuvés sont publics
+      allow read: if resource.data.approved == true;
+      
+      // Création: Utilisateurs authentifiés uniquement
+      allow create: if isAuthenticated() &&
+                      request.resource.data.keys().hasAll(['name', 'role', 'rating', 'content', 'date']) &&
+                      isValidLength(request.resource.data.name, 2, 50) &&
+                      isValidLength(request.resource.data.role, 2, 50) &&
+                      isValidLength(request.resource.data.content, 10, 500) &&
+                      request.resource.data.rating >= 1 &&
+                      request.resource.data.rating <= 5 &&
+                      request.resource.data.approved == false;
+      
+      // Mise à jour et suppression: Admins uniquement
+      allow update, delete: if isAdmin();
+    }
+    
+    // ============================================
+    // Collection: contactMessages (Messages de contact)
+    // ============================================
+    match /contactMessages/{messageId} {
+      // Création: Validation complète des champs
+      allow create: if request.resource.data.keys().hasAll(['name', 'email', 'subject', 'message', 'timestamp']) &&
+                      isValidLength(request.resource.data.name, 2, 100) &&
+                      isValidEmail(request.resource.data.email) &&
+                      isValidLength(request.resource.data.subject, 2, 100) &&
+                      isValidLength(request.resource.data.message, 10, 1000) &&
+                      request.resource.data.timestamp == request.time &&
+                      request.resource.data.read == false;
+      
+      // Lecture, mise à jour et suppression: Admins uniquement
+      allow read, update, delete: if isAdmin();
+    }
+    
+    // ============================================
+    // Collection: newsletterSubscribers (Abonnés newsletter)
+    // ============================================
+    match /newsletterSubscribers/{subscriberId} {
+      // Création: Validation de l'email
+      allow create: if request.resource.data.keys().hasAll(['email', 'subscribedAt', 'active']) &&
+                      isValidEmail(request.resource.data.email) &&
+                      request.resource.data.subscribedAt == request.time &&
+                      request.resource.data.active == true;
+      
+      // Lecture et mise à jour: Admins uniquement
+      allow read, update, delete: if isAdmin();
+    }
+    
+    // ============================================
+    // Collection: statistics (Statistiques)
+    // ============================================
+    match /statistics/{statId} {
+      // Lecture: Public
+      allow read: if true;
+      
+      // Écriture: Admins uniquement
+      allow write: if isAdmin();
+    }
+    
+    // ============================================
+    // Collection: downloads (Téléchargements)
+    // ============================================
+    match /downloads/{downloadId} {
+      // Création: Validation des champs
+      allow create: if request.resource.data.keys().hasAll(['app', 'platform', 'timestamp']) &&
+                      request.resource.data.app in ['dropit', 'pro', 'trade'] &&
+                      request.resource.data.platform in ['ios', 'android'] &&
+                      request.resource.data.timestamp == request.time;
+      
+      // Lecture: Admins uniquement (pour analytics)
+      allow read: if isAdmin();
+      
+      // Pas de mise à jour ou suppression
+      allow update, delete: if false;
+    }
+    
+    // ============================================
+    // Collection: users (Utilisateurs)
+    // ============================================
+    match /users/{userId} {
+      // Lecture: Utilisateur lui-même ou admin
+      allow read: if isAuthenticated() && 
+                    (request.auth.uid == userId || isAdmin());
+      
+      // Création: À la création du compte
+      allow create: if isAuthenticated() && 
+                      request.auth.uid == userId &&
+                      request.resource.data.keys().hasAll(['email', 'createdAt', 'role']) &&
+                      request.resource.data.role == 'user';
+      
+      // Mise à jour: Utilisateur lui-même (sauf le rôle)
+      allow update: if isAuthenticated() && 
+                      request.auth.uid == userId &&
+                      request.resource.data.role == resource.data.role;
+      
+      // Suppression: Admins uniquement
+      allow delete: if isAdmin();
+    }
+    
+    // ============================================
+    // Collection: orders (Commandes) - Pour DROP TRADE
+    // ============================================
+    match /orders/{orderId} {
+      // Lecture: Acheteur, vendeur ou admin
+      allow read: if isAuthenticated() && (
+                    resource.data.buyerId == request.auth.uid ||
+                    resource.data.sellerId == request.auth.uid ||
+                    isAdmin()
+                  );
+      
+      // Création: Utilisateur authentifié
+      allow create: if isAuthenticated() &&
+                      request.resource.data.buyerId == request.auth.uid &&
+                      request.resource.data.keys().hasAll(['buyerId', 'sellerId', 'productId', 'amount', 'status', 'createdAt']) &&
+                      request.resource.data.status == 'pending' &&
+                      request.resource.data.createdAt == request.time;
+      
+      // Mise à jour: Acheteur, vendeur ou admin
+      allow update: if isAuthenticated() && (
+                      resource.data.buyerId == request.auth.uid ||
+                      resource.data.sellerId == request.auth.uid ||
+                      isAdmin()
+                    );
+      
+      // Suppression: Admins uniquement
+      allow delete: if isAdmin();
+    }
+    
+    // ============================================
+    // Collection: products (Produits) - Pour DROP TRADE
+    // ============================================
+    match /products/{productId} {
+      // Lecture: Public
+      allow read: if true;
+      
+      // Création: Utilisateur authentifié
+      allow create: if isAuthenticated() &&
+                      request.resource.data.sellerId == request.auth.uid &&
+                      request.resource.data.keys().hasAll(['name', 'description', 'price', 'sellerId', 'createdAt']) &&
+                      isValidLength(request.resource.data.name, 3, 100) &&
+                      isValidLength(request.resource.data.description, 10, 1000) &&
+                      request.resource.data.price > 0 &&
+                      request.resource.data.createdAt == request.time;
+      
+      // Mise à jour: Vendeur ou admin
+      allow update: if isAuthenticated() && (
+                      resource.data.sellerId == request.auth.uid ||
+                      isAdmin()
+                    );
+      
+      // Suppression: Vendeur ou admin
+      allow delete: if isAuthenticated() && (
+                      resource.data.sellerId == request.auth.uid ||
+                      isAdmin()
+                    );
+    }
+    
+    // ============================================
+    // Collection: deliveries (Livraisons) - Pour DROP IT
+    // ============================================
+    match /deliveries/{deliveryId} {
+      // Lecture: Client, livreur ou admin
+      allow read: if isAuthenticated() && (
+                    resource.data.customerId == request.auth.uid ||
+                    resource.data.deliveryPersonId == request.auth.uid ||
+                    isAdmin()
+                  );
+      
+      // Création: Utilisateur authentifié
+      allow create: if isAuthenticated() &&
+                      request.resource.data.customerId == request.auth.uid &&
+                      request.resource.data.keys().hasAll(['customerId', 'pickupAddress', 'deliveryAddress', 'status', 'createdAt']) &&
+                      request.resource.data.status == 'pending' &&
+                      request.resource.data.createdAt == request.time;
+      
+      // Mise à jour: Client, livreur ou admin
+      allow update: if isAuthenticated() && (
+                      resource.data.customerId == request.auth.uid ||
+                      resource.data.deliveryPersonId == request.auth.uid ||
+                      isAdmin()
+                    );
+      
+      // Suppression: Admins uniquement
+      allow delete: if isAdmin();
+    }
+    
+    // ============================================
+    // Collection: reviews (Avis)
+    // ============================================
+    match /reviews/{reviewId} {
+      // Lecture: Public
+      allow read: if true;
+      
+      // Création: Utilisateur authentifié, une seule review par commande
+      allow create: if isAuthenticated() &&
+                      request.resource.data.userId == request.auth.uid &&
+                      request.resource.data.keys().hasAll(['userId', 'targetId', 'rating', 'comment', 'createdAt']) &&
+                      request.resource.data.rating >= 1 &&
+                      request.resource.data.rating <= 5 &&
+                      isValidLength(request.resource.data.comment, 10, 500) &&
+                      request.resource.data.createdAt == request.time;
+      
+      // Mise à jour: Auteur de la review
+      allow update: if isAuthenticated() && 
+                      resource.data.userId == request.auth.uid;
+      
+      // Suppression: Auteur ou admin
+      allow delete: if isAuthenticated() && (
+                      resource.data.userId == request.auth.uid ||
+                      isAdmin()
+                    );
+    }
+    
+    // ============================================
+    // Par défaut: Tout refuser
+    // ============================================
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
